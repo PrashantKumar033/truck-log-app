@@ -115,6 +115,11 @@ app.delete("/api/entries/:id", async (req, res) => {
   res.sendStatus(204);
 });
 
+// Test endpoint to verify deployment
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Server is running with auth endpoints", timestamp: new Date() });
+});
+
 // Serve main app at root
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
