@@ -15,13 +15,13 @@ const PORT = process.env.PORT || 3000;
 const db = new Low(new JSONFile("db.json"), { entries: [], users: [], sessions: [] });
 await db.read();
 
-// Initialize default users if none exist
-if (!db.data.users) {
-  db.data.users = [];
+// Ensure all required arrays exist
+if (!db.data) {
+  db.data = { entries: [], users: [], sessions: [] };
 }
-if (!db.data.sessions) {
-  db.data.sessions = [];
-}
+if (!db.data.entries) db.data.entries = [];
+if (!db.data.users) db.data.users = [];
+if (!db.data.sessions) db.data.sessions = [];
 
 // Always ensure demo users exist
 const demoUsers = [
