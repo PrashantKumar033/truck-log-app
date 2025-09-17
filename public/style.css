@@ -1,0 +1,322 @@
+/* Mobile-First Responsive Design */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f6f9;
+  color: #333;
+  font-size: 16px;
+}
+
+h1 {
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+  font-size: 20px;
+  background: #0077b6;
+  color: white;
+}
+
+.card {
+  background: white;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Form Styling */
+form input,
+.card input,
+button {
+  display: block;
+  width: 100%;
+  margin: 8px 0 15px 0;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+form input:focus,
+.card input:focus {
+  border-color: #0077b6;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
+}
+
+button {
+  background: #0077b6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #005f87;
+}
+
+/* Mobile Entries Header */
+.mobile-entries-header {
+  background: linear-gradient(135deg, #0077b6, #005f87);
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,119,182,0.3);
+}
+
+.mobile-entries-header h3 {
+  color: white;
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Entry Cards for Mobile */
+.entry-card {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  margin: 10px;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-left: 5px solid #0077b6;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.entry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 10px;
+  border-bottom: 2px solid #0077b6;
+}
+
+.entry-date {
+  font-weight: bold;
+  color: #0077b6;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.entry-date::before {
+  content: '📅';
+}
+
+.entry-truck {
+  background: linear-gradient(135deg, #0077b6, #005f87);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,119,182,0.3);
+}
+
+.entry-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(0,119,182,0.05);
+  border-radius: 10px;
+}
+
+.entry-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background: white;
+  border-radius: 8px;
+  border-left: 3px solid #0077b6;
+}
+
+.entry-label {
+  font-size: 11px;
+  color: #0077b6;
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.entry-value {
+  font-size: 15px;
+  color: #333;
+  font-weight: 600;
+}
+
+.entry-notes {
+  margin-top: 12px;
+  padding: 10px;
+  background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  font-style: italic;
+  color: #856404;
+  font-size: 14px;
+}
+
+.entry-notes strong {
+  color: #b8860b;
+}
+
+.entry-actions {
+  margin-top: 12px;
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px dashed #ddd;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(40,167,69,0.3);
+  transition: all 0.2s ease;
+  margin-right: 5px;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, #20c997, #17a2b8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40,167,69,0.4);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(220,53,69,0.3);
+  transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #c82333, #a71e2a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220,53,69,0.4);
+}
+
+/* Table styling */
+#table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#table th,
+#table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+#table th {
+  background: #0077b6;
+  color: white;
+}
+
+#table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Hide mobile elements on larger screens */
+@media (min-width: 769px) {
+  .mobile-entries-header,
+  .entry-cards {
+    display: none;
+  }
+}
+
+/* Hide desktop table on mobile */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 28px;
+    padding: 20px;
+  }
+
+  .card {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  form input,
+  .card input,
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  /* Improve table on desktop */
+  #table th,
+  #table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Filter buttons styling */
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.filter-buttons button {
+  flex: 1;
+}
+
+/* Summary styling */
+#summary {
+  background: #e3f2fd;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #0077b6;
+  text-align: center;
+}
+
+

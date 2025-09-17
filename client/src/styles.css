@@ -1,0 +1,24 @@
+:root{
+  --primary:#3498db;
+  --bg:#f4f6f8;
+}
+body{font-family:Arial, Helvetica, sans-serif;margin:0;background:var(--bg);}
+.container{max-width:900px;margin:20px auto;padding:0 16px}
+h1{text-align:center;color:#2c3e50}
+.card{background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06);margin-bottom:16px}
+.entry-form input{display:block;width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc}
+.entry-form button{background:var(--primary);color:#fff;padding:10px 14px;border:0;border-radius:6px;cursor:pointer}
+.card input[type="date"], .card input[type="month"]{padding:8px;border-radius:6px;border:1px solid #ccc}
+.card label{display:block;font-size:12px;color:#444;margin-bottom:4px}
+.card button{background:var(--primary);color:#fff;padding:8px 12px;border:0;border-radius:6px;cursor:pointer}
+.responsive-table{width:100%;border-collapse:collapse}
+.responsive-table th,.responsive-table td{border:1px solid #e6e6e6;padding:10px;text-align:left}
+.responsive-table th{background:#f7f9fb}
+.delete-btn{background:#ff6b6b;color:#fff;padding:6px 8px;border:0;border-radius:6px;cursor:pointer}
+
+@media (max-width:700px){
+  .responsive-table thead{display:none}
+  .responsive-table tr{display:block;margin-bottom:12px;border-radius:8px;overflow:hidden}
+  .responsive-table td{display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #eee}
+  .responsive-table td::before{content:attr(data-label);font-weight:bold}
+}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup - Truck Log</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .signup-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .signup-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .signup-header {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+    .login-link {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .login-link a {
+      color: #0077b6;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="signup-card">
+      <div class="signup-header">
+        <h2>🚚 Create Account</h2>
+        <p>Join Truck Log System</p>
+      </div>
+      
+      <form id="signupForm">
+        <label for="name" style="font-weight: bold; margin-bottom: 5px; display: block; color: #28a745;">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+        
+        <label for="username" style="font-weight: bold; margin-bottom: 5px; display: block; color: #28a745;">Username</label>
+        <input type="text" id="username" placeholder="Choose a username" required>
+        
+        <label for="password" style="font-weight: bold; margin-bottom: 5px; display: block; color: #28a745;">Password</label>
+        <input type="password" id="password" placeholder="Create a password" required>
+        
+        <button type="submit" style="background: linear-gradient(135deg, #28a745, #20c997);">✅ Create Account</button>
+      </form>
+      
+      <div class="login-link">
+        Already have an account? <a href="/login.html">Login here</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, username, password })
+        });
+        
+        if (response.ok) {
+          alert('Account created successfully! Please login.');
+          window.location.href = '/login.html';
+        } else {
+          const error = await response.json();
+          alert(error.error || 'Signup failed');
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "truck-log-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "node test-auth.js",
+    "test:auth": "node test-auth.js",
+    "start": "node server.js",
+    "dev": "nodemon server-clean.js",
+    "migrate": "node server/scripts/migrate.js",
+    "client": "npm --prefix client run dev",
+    "dev:all": "concurrently \"npm run dev\" \"npm run client\"",
+    "build": "npm --prefix client run build",
+    "install:all": "npm install && npm --prefix client install"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.1.4",
+    "path-to-regexp": "6.2.1",
+    "express": "^5.1.0",
+    "lowdb": "^7.0.1",
+    "mongoose": "^8.17.1",
+    "nanoid": "^5.1.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.1.10"
+  }
+}

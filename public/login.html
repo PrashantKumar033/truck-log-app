@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Truck Log</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .login-card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-header {
+      background: linear-gradient(135deg, #0077b6, #005f87);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+    .demo-users {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>🚚 Truck Log System</h2>
+        <p>Please login to continue</p>
+      </div>
+      
+      <form id="loginForm">
+        <label for="username" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
+        
+        <label for="password" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+        
+        <button type="submit">🔐 Login</button>
+      </form>
+      
+      <div class="demo-users">
+        <strong>Demo Users:</strong><br>
+        • admin / admin123 (Admin User)<br>
+        • driver1 / driver123 (Driver 1)<br>
+        • driver2 / driver123 (Driver 2)
+      </div>
+      
+      <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; font-size: 14px;">
+        Don't have an account? <a href="/signup.html" style="color: #0077b6; text-decoration: none; font-weight: bold;">Create Account</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('sessionId', data.sessionId);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          window.location.href = '/';
+        } else {
+          const error = await response.json();
+          alert(error.error || 'Login failed');
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+</body>
+</html>

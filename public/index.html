@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gas Plant Truck Log</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="userInfo" style="background: #005f87; color: white; padding: 10px; text-align: center; display: none;">
+    <span id="welcomeText"></span>
+    <button onclick="logout()" style="float: right; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+  </div>
+  <h1>🚚 Gas Plant Truck Log</h1>
+
+  <div class="card">
+    <h3>🚚 New Entry</h3>
+    <form id="entryForm">
+      <label for="date" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Date *</label>
+      <input type="date" id="date" required>
+      
+      <label for="truckNo" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Truck Number *</label>
+      <input type="text" id="truckNo" placeholder="Enter truck number" required>
+      
+      <label for="loadLocation" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Load Location *</label>
+      <input type="text" id="loadLocation" placeholder="Enter load location" required>
+      
+      <label for="dieselLiters" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Diesel (Liters) *</label>
+      <input type="number" step="0.01" id="dieselLiters" placeholder="Enter diesel amount" required>
+      
+      <label for="amountPaid" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Amount Paid (₹) *</label>
+      <input type="number" step="0.01" id="amountPaid" placeholder="Enter amount paid" required>
+      
+      <label for="notes" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Notes</label>
+      <input type="text" id="notes" placeholder="Additional notes (optional)">
+      
+      <button type="submit">💾 Save Entry</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>🔍 Filter & Summary</h3>
+    
+    <label for="from" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">From Date</label>
+    <input type="date" id="from">
+    
+    <label for="to" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">To Date</label>
+    <input type="date" id="to">
+    
+    <div class="filter-buttons">
+      <button onclick="loadEntries()">📅 Load by Date Range</button>
+    </div>
+    
+    <label for="month" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Select Month</label>
+    <input type="month" id="month">
+    
+    <div class="filter-buttons">
+      <button onclick="loadMonth()">📆 Load by Month</button>
+    </div>
+    
+    <div class="filter-buttons">
+      <button onclick="clearFiltersAndLoad()" style="background: #28a745;">🔄 Load All Entries</button>
+    </div>
+    
+    <div id="summary"></div>
+  </div>
+
+  <!-- Mobile Entries Header -->
+  <div class="mobile-entries-header">
+    <h3>📋 All Entries</h3>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="entry-cards" id="entryCards">
+    <!-- Cards will be populated here -->
+  </div>
+
+  <!-- Desktop Table View -->
+  <div class="card desktop-only">
+    <h3>📋 Entries</h3>
+    <table id="table">
+      <thead>
+        <tr><th>Date</th><th>Truck No</th><th>Load</th><th>Diesel</th><th>Amount</th><th>Notes</th><th>Actions</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+<script>
+// Check if user is logged in, redirect to login if not
+if (!localStorage.getItem('sessionId') || !localStorage.getItem('user')) {
+  window.location.href = '/login.html';
+}
+</script>
+<script src="script-clean.js"></script>
+</body>
+</html>
