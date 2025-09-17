@@ -16,14 +16,27 @@ const db = new Low(new JSONFile("db.json"), { entries: [], users: [], sessions: 
 await db.read();
 
 // Initialize default users if none exist
-if (!db.data.users || db.data.users.length === 0) {
-  db.data.users = [
-    { id: "1", username: "admin", password: "admin123", role: "admin" },
-    { id: "2", username: "driver1", password: "driver123", role: "driver" },
-    { id: "3", username: "driver2", password: "driver123", role: "driver" }
-  ];
-  await db.write();
+if (!db.data.users) {
+  db.data.users = [];
 }
+if (!db.data.sessions) {
+  db.data.sessions = [];
+}
+
+// Always ensure demo users exist
+const demoUsers = [
+  { id: "1", username: "admin", password: "admin123", role: "admin" },
+  { id: "2", username: "driver1", password: "driver123", role: "driver" },
+  { id: "3", username: "driver2", password: "driver123", role: "driver" }
+];
+
+demoUsers.forEach(demoUser => {
+  if (!db.data.users.find(u => u.username === demoUser.username)) {
+    db.data.users.push(demoUser);
+  }
+});
+
+await db.write();
 
 // Middleware
 app.use(express.json());
@@ -31,18 +44,26 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Authentication endpoints
 app.post("/api/login", async (req, res) => {
-  const { username, password } = req.body;
-  const user = db.data.users.find(u => u.username === username && u.password === password);
-  
-  if (user) {
-    const sessionId = nanoid();
-    const session = { id: sessionId, userId: user.id, createdAt: new Date() };
-    db.data.sessions.push(session);
-    await db.write();
+  try {
+    const { username, password } = req.body;
+    console.log(`Login attempt: ${username}`);
+    console.log(`Available users: ${db.data.users.map(u => u.username).join(', ')}`);
     
-    res.json({ sessionId, user: { id: user.id, username: user.username, role: user.role } });
-  } else {
-    res.status(401).json({ error: "Invalid credentials" });
+    const user = db.data.users.find(u => u.username === username && u.password === password);
+    
+    if (user) {
+      const sessionId = nanoid();
+      const session = { id: sessionId, userId: user.id, createdAt: new Date() };
+      db.data.sessions.push(session);
+      await db.write();
+      
+      res.json({ sessionId, user: { id: user.id, username: user.username, role: user.role } });
+    } else {
+      res.status(401).json({ error: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
