@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transport Test</title>
+</head>
+<body>
+    <h1>Transport API Test</h1>
+    <button onclick="testLogin()">1. Test Login</button>
+    <button onclick="testGetTransports()">2. Test Get Transports</button>
+    <button onclick="testCreateTransport()">3. Test Create Transport</button>
+    <div id="results"></div>
+
+    <script>
+        let sessionId = null;
+
+        async function testLogin() {
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'admin', password: 'admin123' })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    sessionId = data.sessionId;
+                    document.getElementById('results').innerHTML += '<p>✅ Login successful. Session: ' + sessionId + '</p>';
+                } else {
+                    document.getElementById('results').innerHTML += '<p>❌ Login failed</p>';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML += '<p>❌ Login error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testGetTransports() {
+            if (!sessionId) {
+                document.getElementById('results').innerHTML += '<p>❌ Please login first</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/transports', {
+                    headers: { 'X-Session-Id': sessionId }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('results').innerHTML += '<p>✅ Get transports successful. Count: ' + data.length + '</p>';
+                    console.log('Transports:', data);
+                } else {
+                    document.getElementById('results').innerHTML += '<p>❌ Get transports failed: ' + response.status + '</p>';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML += '<p>❌ Get transports error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testCreateTransport() {
+            if (!sessionId) {
+                document.getElementById('results').innerHTML += '<p>❌ Please login first</p>';
+                return;
+            }
+
+            try {
+                const transport = {
+                    name: 'Test Transport ' + Date.now(),
+                    location: 'Test Location',
+                    dieselRate: 95.50,
+                    transportRate: 1200,
+                    labourCost: 200
+                };
+
+                const response = await fetch('/api/transports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Session-Id': sessionId
+                    },
+                    body: JSON.stringify(transport)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('results').innerHTML += '<p>✅ Create transport successful. ID: ' + data.id + '</p>';
+                    console.log('Created transport:', data);
+                } else {
+                    const errorText = await response.text();
+                    document.getElementById('results').innerHTML += '<p>❌ Create transport failed: ' + response.status + ' - ' + errorText + '</p>';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML += '<p>❌ Create transport error: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>

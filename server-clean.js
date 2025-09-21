@@ -14,9 +14,9 @@ const PORT = process.env.PORT || 3000;
 // Database setup with error handling
 let db;
 try {
-  db = new Low(new JSONFile("db.json"), { entries: [], users: [] });
+  db = new Low(new JSONFile("db.json"), { entries: [], users: [], transports: [] });
   await db.read();
-  db.data ||= { entries: [], users: [] };
+  db.data ||= { entries: [], users: [], transports: [] };
   await db.write();
 } catch (error) {
   console.error("Database initialization failed:", error);
@@ -120,7 +120,7 @@ app.post("/api/logout", (req, res) => {
 // Create entry
 app.post("/api/entries", requireAuth, async (req, res) => {
   try {
-    const { date, truckNo, loadLocation, dieselLiters, amountPaid, notes } = req.body;
+    const { date, truckNo, transportName, loadLocation, dieselLiters, amountPaid, labourCost, notes } = req.body;
     
     // Basic validation
     if (!date || !truckNo || !loadLocation) {
@@ -132,9 +132,11 @@ app.post("/api/entries", requireAuth, async (req, res) => {
       userId: req.user.id,
       date: sanitizeInput(date),
       truckNo: sanitizeInput(truckNo),
+      transportName: sanitizeInput(transportName) || "",
       loadLocation: sanitizeInput(loadLocation),
       dieselLiters: Number(dieselLiters) || 0,
       amountPaid: Number(amountPaid) || 0,
+      labourCost: Number(labourCost) || 0,
       notes: sanitizeInput(notes) || ""
     };
 
@@ -214,9 +216,11 @@ app.put("/api/entries/:id", requireAuth, async (req, res) => {
       ...db.data.entries[entryIndex],
       date: sanitizeInput(date),
       truckNo: sanitizeInput(truckNo),
+      transportName: sanitizeInput(req.body.transportName) || "",
       loadLocation: sanitizeInput(loadLocation),
       dieselLiters: Number(dieselLiters) || 0,
       amountPaid: Number(amountPaid) || 0,
+      labourCost: Number(req.body.labourCost) || 0,
       notes: sanitizeInput(notes) || ""
     };
     
@@ -244,6 +248,114 @@ app.delete("/api/entries/:id", requireAuth, async (req, res) => {
   } catch (error) {
     console.error("Error deleting entry:", error);
     res.status(500).json({ error: "Failed to delete entry" });
+  }
+});
+
+// Transport endpoints
+app.post("/api/transports", requireAuth, async (req, res) => {
+  try {
+    console.log('Transport creation request:', req.body);
+    const { name, dieselRate, transportRate, labourCost } = req.body;
+    
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Transport name is required" });
+    }
+    
+    const transport = { 
+      id: nanoid(), 
+      userId: req.user.id,
+      name: sanitizeInput(name.trim()), 
+      dieselRate: Number(dieselRate || 0), 
+      transportRate: Number(transportRate || 0), 
+      labourCost: Number(labourCost || 0) 
+    };
+    
+    db.data.transports.push(transport);
+    await db.write();
+    console.log('Transport created successfully:', transport);
+    res.json(transport);
+  } catch (error) {
+    console.error('Error creating transport:', error);
+    res.status(500).json({ error: "Failed to create transport" });
+  }
+});
+
+app.get("/api/transports", requireAuth, async (req, res) => {
+  try {
+    const transports = db.data.transports.filter(t => t.userId === req.user.id);
+    console.log('Fetching transports, count:', transports.length);
+    res.json(transports);
+  } catch (error) {
+    console.error('Error fetching transports:', error);
+    res.status(500).json({ error: "Failed to fetch transports" });
+  }
+});
+
+app.get("/api/transports/:name", requireAuth, async (req, res) => {
+  try {
+    const transport = db.data.transports.find(t => 
+      t.userId === req.user.id && t.name.toLowerCase() === req.params.name.toLowerCase()
+    );
+    if (transport) {
+      res.json(transport);
+    } else {
+      res.status(404).json({ error: "Transport not found" });
+    }
+  } catch (error) {
+    console.error('Error fetching transport by name:', error);
+    res.status(500).json({ error: "Failed to fetch transport" });
+  }
+});
+
+// Update transport
+app.put("/api/transports/:id", requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, dieselRate, transportRate, labourCost } = req.body;
+    
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Transport name is required" });
+    }
+    
+    const transportIndex = db.data.transports.findIndex(t => t.id === id && t.userId === req.user.id);
+    if (transportIndex === -1) {
+      return res.status(404).json({ error: "Transport not found" });
+    }
+    
+    db.data.transports[transportIndex] = {
+      ...db.data.transports[transportIndex],
+      name: sanitizeInput(name.trim()),
+      dieselRate: Number(dieselRate || 0),
+      transportRate: Number(transportRate || 0),
+      labourCost: Number(labourCost || 0)
+    };
+    
+    await db.write();
+    console.log('Transport updated successfully:', db.data.transports[transportIndex]);
+    res.json(db.data.transports[transportIndex]);
+  } catch (error) {
+    console.error('Error updating transport:', error);
+    res.status(500).json({ error: "Failed to update transport" });
+  }
+});
+
+// Delete transport
+app.delete("/api/transports/:id", requireAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const initialLength = db.data.transports.length;
+    db.data.transports = db.data.transports.filter(t => t.id !== id || t.userId !== req.user.id);
+    
+    if (db.data.transports.length === initialLength) {
+      return res.status(404).json({ error: "Transport not found" });
+    }
+    
+    await db.write();
+    console.log('Transport deleted successfully');
+    res.sendStatus(204);
+  } catch (error) {
+    console.error('Error deleting transport:', error);
+    res.status(500).json({ error: "Failed to delete transport" });
   }
 });
 

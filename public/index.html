@@ -2,87 +2,178 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gas Plant Truck Log</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="userInfo" style="background: #005f87; color: white; padding: 10px; text-align: center; display: none;">
-    <span id="welcomeText"></span>
-    <button onclick="logout()" style="float: right; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav">
+    <h1>🚚 Truck Log</h1>
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
   </div>
-  <h1>🚚 Gas Plant Truck Log</h1>
-
-  <div class="card">
-    <h3>🚚 New Entry</h3>
-    <form id="entryForm">
-      <label for="date" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Date *</label>
-      <input type="date" id="date" required>
-      
-      <label for="truckNo" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Truck Number *</label>
-      <input type="text" id="truckNo" placeholder="Enter truck number" required>
-      
-      <label for="loadLocation" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Load Location *</label>
-      <input type="text" id="loadLocation" placeholder="Enter load location" required>
-      
-      <label for="dieselLiters" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Diesel (Liters) *</label>
-      <input type="number" step="0.01" id="dieselLiters" placeholder="Enter diesel amount" required>
-      
-      <label for="amountPaid" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Amount Paid (₹) *</label>
-      <input type="number" step="0.01" id="amountPaid" placeholder="Enter amount paid" required>
-      
-      <label for="notes" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Notes</label>
-      <input type="text" id="notes" placeholder="Additional notes (optional)">
-      
-      <button type="submit">💾 Save Entry</button>
-    </form>
+  
+  <!-- Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>🚚 Menu</h3>
+      <button class="close-btn" onclick="toggleNav()">×</button>
+    </div>
+    <div class="nav-links">
+      <a href="#" onclick="showSection('entries')">📋 Entries</a>
+      <a href="#" onclick="showSection('transports')">🚛 Transports</a>
+      <a href="#" onclick="showSection('summary')">📊 Summary</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
+    </div>
+    <div id="userInfo" style="padding: 15px; border-top: 1px solid #ddd; margin-top: auto;">
+      <span id="welcomeText"></span>
+    </div>
+  </div>
+  
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="toggleNav()"></div>
+  
+  <!-- Desktop Header -->
+  <div class="desktop-header">
+    <h1>🚚 Gas Plant Truck Log</h1>
+    <div id="userInfoDesktop" style="display: none;">
+      <span id="welcomeTextDesktop"></span>
+      <button onclick="logout()" style="background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-left: 10px;">Logout</button>
+    </div>
+  </div>
+  
+  <!-- Desktop Navigation Tabs -->
+  <div class="desktop-nav-tabs">
+    <button class="nav-tab active" onclick="showSection('entries')">📋 Entries</button>
+    <button class="nav-tab" onclick="showSection('transports')">🚛 Transports</button>
+    <button class="nav-tab" onclick="showSection('summary')">📊 Summary</button>
   </div>
 
-  <div class="card">
-    <h3>🔍 Filter & Summary</h3>
+  <!-- Main Content -->
+  <div class="main-content">
     
-    <label for="from" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">From Date</label>
-    <input type="date" id="from">
-    
-    <label for="to" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">To Date</label>
-    <input type="date" id="to">
-    
-    <div class="filter-buttons">
-      <button onclick="loadEntries()">📅 Load by Date Range</button>
+    <!-- Entries Section -->
+    <div id="entriesSection" class="section active">
+      <div class="card">
+        <h3>🚚 New Entry</h3>
+        <form id="entryForm">
+          <label for="date">Date *</label>
+          <input type="date" id="date" required style="cursor: pointer; position: relative;">
+          
+          <label for="truckNo">Truck Number *</label>
+          <input type="text" id="truckNo" placeholder="Enter truck number" required>
+          
+          <label for="transportName">Transport Name</label>
+          <div class="transport-input-container">
+            <input type="text" id="transportName" placeholder="Enter transport name" autocomplete="off">
+            <div class="transport-dropdown" id="transportDropdown"></div>
+          </div>
+          
+          <label for="loadLocation">Load Location *</label>
+          <input type="text" id="loadLocation" placeholder="Enter load location" required>
+          
+          <label for="dieselLiters">Diesel (Liters) *</label>
+          <input type="number" id="dieselLiters" placeholder="Enter diesel amount" required>
+          
+          <label for="amountPaid">Amount Paid (₹) *</label>
+          <input type="number" id="amountPaid" placeholder="Enter amount paid" required>
+          
+          <label for="labourCost">Labour Cost (₹)</label>
+          <input type="number" id="labourCost" placeholder="Enter labour cost">
+          
+          <label for="notes">Notes</label>
+          <input type="text" id="notes" placeholder="Additional notes (optional)">
+          
+          <button type="submit">💾 Save Entry</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>🔍 Filter & Summary</h3>
+        
+        <label for="from">From Date</label>
+        <input type="date" id="from">
+        
+        <label for="to">To Date</label>
+        <input type="date" id="to">
+        
+        <div class="filter-buttons">
+          <button onclick="loadEntries()">📅 Load by Date Range</button>
+        </div>
+        
+        <label for="month">Select Month</label>
+        <input type="month" id="month">
+        
+        <div class="filter-buttons">
+          <button onclick="loadMonth()">📆 Load by Month</button>
+        </div>
+        
+        <div class="filter-buttons">
+          <button onclick="clearFiltersAndLoad()" style="background: #28a745;">🔄 Load All Entries</button>
+        </div>
+        
+        <div id="summary"></div>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="entry-cards" id="entryCards">
+        <!-- Cards will be populated here -->
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="card desktop-only">
+        <h3>📋 Entries</h3>
+        <table id="table">
+          <thead>
+            <tr><th>Date</th><th>Truck No</th><th>Transport</th><th>Load</th><th>Diesel</th><th>Amount</th><th>Labour</th><th>Notes</th><th>Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </div>
     
-    <label for="month" style="font-weight: bold; margin-bottom: 5px; display: block; color: #0077b6;">Select Month</label>
-    <input type="month" id="month">
-    
-    <div class="filter-buttons">
-      <button onclick="loadMonth()">📆 Load by Month</button>
+    <!-- Transports Section -->
+    <div id="transportsSection" class="section">
+      <div class="card">
+        <h3>🚛 Add Transport</h3>
+        <form id="transportForm">
+          <label for="transportNameAdd">Transport Name *</label>
+          <input type="text" id="transportNameAdd" placeholder="Enter transport name" required>
+          
+          <label for="transportLocation">Location</label>
+          <input type="text" id="transportLocation" placeholder="Enter transport location">
+          
+          <label for="dieselRate">Diesel (Liters)</label>
+          <input type="number" id="dieselRate" placeholder="Enter diesel liters required for this location">
+          
+          <label for="transportRate">Transport Rate (₹)</label>
+          <input type="number" id="transportRate" placeholder="Enter transport rate">
+          
+          <label for="labourCostDefault">Default Labour Cost (₹)</label>
+          <input type="number" id="labourCostDefault" placeholder="Enter default labour cost">
+          
+          <button type="submit">💾 Add Transport</button>
+        </form>
+      </div>
+      
+      <div class="card">
+        <h3>🚛 All Transports</h3>
+        
+        <label for="transportSearch">🔍 Search Transports</label>
+        <input type="text" id="transportSearch" placeholder="Search by name or location..." style="margin-bottom: 15px;">
+        
+        <div id="transportsList"></div>
+      </div>
     </div>
     
-    <div class="filter-buttons">
-      <button onclick="clearFiltersAndLoad()" style="background: #28a745;">🔄 Load All Entries</button>
+    <!-- Summary Section -->
+    <div id="summarySection" class="section">
+      <div class="card">
+        <h3>📊 Summary</h3>
+        <div id="detailedSummary"></div>
+      </div>
     </div>
     
-    <div id="summary"></div>
-  </div>
-
-  <!-- Mobile Entries Header -->
-  <div class="mobile-entries-header">
-    <h3>📋 All Entries</h3>
-  </div>
-
-  <!-- Mobile Card View -->
-  <div class="entry-cards" id="entryCards">
-    <!-- Cards will be populated here -->
-  </div>
-
-  <!-- Desktop Table View -->
-  <div class="card desktop-only">
-    <h3>📋 Entries</h3>
-    <table id="table">
-      <thead>
-        <tr><th>Date</th><th>Truck No</th><th>Load</th><th>Diesel</th><th>Amount</th><th>Notes</th><th>Actions</th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
   </div>
 
 <script>
@@ -90,6 +181,42 @@
 if (!localStorage.getItem('sessionId') || !localStorage.getItem('user')) {
   window.location.href = '/login.html';
 }
+
+// Navigation functions
+function toggleNav() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+function showSection(sectionName) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(section => {
+    section.classList.remove('active');
+  });
+  
+  // Show selected section
+  document.getElementById(sectionName + 'Section').classList.add('active');
+  
+  // Close mobile nav
+  toggleNav();
+  
+  // Load data for the section
+  if (sectionName === 'entries') {
+    loadEntries();
+    loadTransportsList();
+  } else if (sectionName === 'transports') {
+    loadTransports();
+  } else if (sectionName === 'summary') {
+    loadDetailedSummary();
+  }
+}
+
+// Initialize on load
+window.addEventListener('load', () => {
+  showSection('entries');
+});
 </script>
 <script src="script-clean.js"></script>
 </body>

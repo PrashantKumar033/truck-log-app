@@ -12,14 +12,7 @@ async function initDB() {
   // If db.json is empty, set defaults
   db.data ||= { entries: [], users: [] }
   
-  // Add default users if none exist
-  if (!db.data.users || db.data.users.length === 0) {
-    db.data.users = [
-      { id: "user1", username: "admin", password: "admin123", name: "Admin User" },
-      { id: "user2", username: "driver1", password: "driver123", name: "Driver 1" },
-      { id: "user3", username: "driver2", password: "driver123", name: "Driver 2" }
-    ];
-  }
+  // No default users - clean start
   
   await db.write()
 }

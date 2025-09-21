@@ -1,68 +1,28 @@
 {
-  "entries": [
-    {
-      "id": "O-d43Yerbc1I3NOPpaT-X",
-      "date": "2025-08-19",
-      "truckNo": "7934",
-      "loadLocation": "jalandhar",
-      "dieselLiters": 230,
-      "amountPaid": 1200,
-      "notes": "goes at night"
-    },
-    {
-      "id": "lBtJT4YXCWNia7_qeZa49",
-      "date": "2025-08-19",
-      "truckNo": "2302",
-      "loadLocation": "mohali",
-      "dieselLiters": 50,
-      "amountPaid": 1200,
-      "notes": "goes at night"
-    },
-    {
-      "id": "eU_imLNOtwfs6fgIxeVEy",
-      "userId": "uAihzrbjyxM9-7BAa3EFj",
-      "date": "2025-09-16",
-      "truckNo": "7934",
-      "loadLocation": "jalandhar",
-      "dieselLiters": 135,
-      "amountPaid": 1100,
-      "notes": "goes at night"
-    },
-    {
-      "id": "lcC1yOhXkh2y2Bknq0gHq",
-      "userId": "uAihzrbjyxM9-7BAa3EFj",
-      "date": "2025-09-15",
-      "truckNo": "7934",
-      "loadLocation": "mohali",
-      "dieselLiters": 90,
-      "amountPaid": 999.95,
-      "notes": "goes at night"
-    }
-  ],
+  "entries": [],
   "users": [
     {
-      "id": "user1",
-      "username": "admin",
-      "password": "admin123",
-      "name": "Admin User"
-    },
-    {
-      "id": "user2",
-      "username": "driver1",
-      "password": "driver123",
-      "name": "Driver 1"
-    },
-    {
-      "id": "user3",
-      "username": "driver2",
-      "password": "driver123",
-      "name": "Driver 2"
-    },
-    {
-      "id": "uAihzrbjyxM9-7BAa3EFj",
+      "id": "-RJ6dLwCik3BKKUgpeYVg",
       "username": "Prashant",
-      "password": "Prashant",
-      "name": "Prashant"
+      "password": "Prashant@12345",
+      "role": "driver"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "kIPxKfjA0lE8TzP0pdgl_",
+      "userId": "-RJ6dLwCik3BKKUgpeYVg",
+      "createdAt": "2025-09-21T12:10:07.897Z"
+    }
+  ],
+  "transports": [
+    {
+      "id": "hMocGZYxv5icnSyfT0THL",
+      "name": "Test Transport 1758456610110",
+      "location": "Test Location",
+      "dieselRate": 95,
+      "transportRate": 1000,
+      "labourCost": 150
     }
   ]
 }
